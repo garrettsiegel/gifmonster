@@ -26,6 +26,20 @@ async function createFrameInputDir() {
   return dir;
 }
 
+async function waitForCondition(predicate, timeoutMs = 1000) {
+  const deadline = Date.now() + timeoutMs;
+
+  while (Date.now() < deadline) {
+    if (predicate()) {
+      return true;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 10));
+  }
+
+  return predicate();
+}
+
 test('encodeGif returns stats and writes output', async () => {
   const inputDir = await createFrameInputDir();
   const outputPath = path.join(inputDir, 'out.gif');
@@ -62,9 +76,16 @@ test('encodeGif invokes progress callback', async () => {
       },
     );
 
+    // Progress events are emitted from native worker threads and can arrive
+    // slightly after the encode promise resolves.
+    const receivedProgress = await waitForCondition(
+      () => events.includes('progress'),
+      1000,
+    );
+
     assert.ok(events.includes('stage'));
     assert.ok(events.includes('length'));
-    assert.ok(events.includes('progress'));
+    assert.ok(receivedProgress, `expected a progress event, got: ${events.join(', ')}`);
   } finally {
     await fsp.rm(inputDir, { recursive: true, force: true });
   }
