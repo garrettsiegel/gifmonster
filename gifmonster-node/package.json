@@ -1,6 +1,6 @@
 {
   "name": "gifmonster",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Node.js native bindings for gifmonster",
   "license": "MIT OR Apache-2.0",
   "main": "index.js",
@@ -45,11 +45,11 @@
     "release:verify": "node scripts/release-readiness.mjs"
   },
   "optionalDependencies": {
-    "gifmonster-darwin-arm64": "0.1.0",
-    "gifmonster-darwin-x64": "0.1.0",
-    "gifmonster-linux-x64-gnu": "0.1.0",
-    "gifmonster-linux-x64-musl": "0.1.0",
-    "gifmonster-win32-x64-msvc": "0.1.0"
+    "gifmonster-darwin-arm64": "0.1.1",
+    "gifmonster-darwin-x64": "0.1.1",
+    "gifmonster-linux-x64-gnu": "0.1.1",
+    "gifmonster-linux-x64-musl": "0.1.1",
+    "gifmonster-win32-x64-msvc": "0.1.1"
   },
   "devDependencies": {
     "@napi-rs/cli": "^3",
