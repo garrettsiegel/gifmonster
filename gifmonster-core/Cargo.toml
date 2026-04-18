@@ -1,0 +1,15 @@
+[package]
+name = "gifmonster-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Core GIF encoding pipeline for gifmonster"
+
+[dependencies]
+anyhow = "1.0"
+gif = "0.14"
+image = "0.25"
+rayon = "1.12"
+color_quant = "1.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"

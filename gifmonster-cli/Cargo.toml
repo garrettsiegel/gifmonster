@@ -1,0 +1,16 @@
+[package]
+name = "gifmonster-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "CLI for gifmonster"
+
+[[bin]]
+name = "gifmonster"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive"] }
+indicatif = "0.18"
+gifmonster-core = { path = "../gifmonster-core" }

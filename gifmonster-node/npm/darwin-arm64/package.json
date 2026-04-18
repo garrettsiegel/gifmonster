@@ -1,0 +1,18 @@
+{
+  "name": "gifmonster-darwin-arm64",
+  "version": "0.1.0",
+  "description": "Prebuilt gifmonster binary for darwin arm64",
+  "os": ["darwin"],
+  "cpu": ["arm64"],
+  "main": "gifmonster.darwin-arm64.node",
+  "files": ["gifmonster.darwin-arm64.node"],
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/REPLACE_WITH_ORG/gifmonster.git"
+  },
+  "homepage": "https://github.com/REPLACE_WITH_ORG/gifmonster",
+  "bugs": {
+    "url": "https://github.com/REPLACE_WITH_ORG/gifmonster/issues"
+  }
+}

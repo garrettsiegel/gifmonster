@@ -1,0 +1,18 @@
+{
+  "name": "gifmonster-win32-x64-msvc",
+  "version": "0.1.0",
+  "description": "Prebuilt gifmonster binary for win32 x64 msvc",
+  "os": ["win32"],
+  "cpu": ["x64"],
+  "main": "gifmonster.win32-x64-msvc.node",
+  "files": ["gifmonster.win32-x64-msvc.node"],
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/REPLACE_WITH_ORG/gifmonster.git"
+  },
+  "homepage": "https://github.com/REPLACE_WITH_ORG/gifmonster",
+  "bugs": {
+    "url": "https://github.com/REPLACE_WITH_ORG/gifmonster/issues"
+  }
+}

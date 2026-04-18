@@ -1,0 +1,15 @@
+# Rust and build sources not needed in the published npm package
+src/
+__test__/
+Cargo.toml
+build.rs
+
+# Prebuilt platform package sources are published separately
+npm/
+
+# Local build artifacts
+target/
+*.node
+
+# Development-only files
+package-lock.json

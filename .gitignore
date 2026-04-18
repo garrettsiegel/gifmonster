@@ -1,0 +1,19 @@
+# Rust build outputs
+/target/
+**/target/
+
+# Node dependencies and build artifacts
+**/node_modules/
+gifmonster-node/*.node
+gifmonster-node/npm/*/*.node
+/artifacts/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.idea/

@@ -1,0 +1,145 @@
+name: gifmonster-node-publish
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: npm-publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  prebuild-matrix:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            artifact: linux-x64-gnu
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            artifact: linux-x64-musl
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            artifact: darwin-arm64
+          - os: macos-13
+            target: x86_64-apple-darwin
+            artifact: darwin-x64
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            artifact: win32-x64-msvc
+
+    defaults:
+      run:
+        working-directory: gifmonster-node
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+          cache-dependency-path: gifmonster-node/package-lock.json
+
+      - name: Install musl toolchain
+        if: matrix.target == 'x86_64-unknown-linux-musl'
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build native binary
+        run: npx napi build --release --target ${{ matrix.target }}
+
+      - name: Collect build outputs
+        shell: bash
+        run: |
+          mkdir -p ../artifacts/${{ matrix.artifact }}
+          cp -v ./*.node ../artifacts/${{ matrix.artifact }}/
+
+      - name: Upload prebuild artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gifmonster-${{ matrix.artifact }}
+          path: artifacts/${{ matrix.artifact }}/*.node
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: prebuild-matrix
+
+    defaults:
+      run:
+        working-directory: gifmonster-node
+
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+          cache-dependency-path: gifmonster-node/package-lock.json
+
+      - name: Verify release tag matches package version
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          PKG_VERSION="$(node -p "require('./package.json').version")"
+          if [ "${TAG_VERSION}" != "${PKG_VERSION}" ]; then
+            echo "Release tag version (${TAG_VERSION}) does not match package.json version (${PKG_VERSION})."
+            exit 1
+          fi
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Download prebuild artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: gifmonster-*
+          path: gifmonster-node/artifacts
+          merge-multiple: true
+
+      - name: Stage prebuild binaries
+        shell: bash
+        run: |
+          cp -v artifacts/*.node .
+
+      - name: Prepare npm packages
+        run: npx napi prepublish -t npm
+
+      - name: Publish platform packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          for dir in \
+            npm/darwin-arm64 \
+            npm/darwin-x64 \
+            npm/linux-x64-gnu \
+            npm/linux-x64-musl \
+            npm/win32-x64-msvc
+          do
+            echo "Publishing ${dir}"
+            (cd "${dir}" && npm publish --access public --provenance)
+          done
+
+      - name: Publish main package
+        run: npm publish --access public --provenance --ignore-scripts

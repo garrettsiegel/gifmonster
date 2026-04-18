@@ -1,0 +1,18 @@
+[package]
+name = "gifmonster-node"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Node.js native bindings for gifmonster"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+anyhow = "1.0"
+gifmonster-core = { path = "../gifmonster-core" }
+napi = { version = "3", features = ["napi9"] }
+napi-derive = "3"
+
+[build-dependencies]
+napi-build = "2.3.1"
