@@ -82,6 +82,10 @@ type GifEncodeResult = {
 - Video input requires `ffmpeg` and `ffprobe` available on your PATH.
 - Directory input (PNG/JPEG frames) does not require ffmpeg.
 
+## Releasing (Maintainers)
+
+See `docs/release-node.md` for the release checklist and validation steps.
+
 ## License
 
 MIT OR Apache-2.0

@@ -10,6 +10,9 @@ const require = createRequire(import.meta.url);
 const { encodeGif } = require('../index.js');
 const { PNG } = require('pngjs');
 
+const WAIT_POLL_INTERVAL_MS = 10;
+const DEFAULT_ASYNC_WAIT_TIMEOUT_MS = process.env.CI ? 5000 : 2000;
+
 function createSolidPngBuffer(r, g, b, a = 255) {
   const png = new PNG({ width: 1, height: 1 });
   png.data[0] = r;
@@ -26,7 +29,10 @@ async function createFrameInputDir() {
   return dir;
 }
 
-async function waitForCondition(predicate, timeoutMs = 1000) {
+async function waitForCondition(
+  predicate,
+  timeoutMs = DEFAULT_ASYNC_WAIT_TIMEOUT_MS,
+) {
   const deadline = Date.now() + timeoutMs;
 
   while (Date.now() < deadline) {
@@ -34,7 +40,7 @@ async function waitForCondition(predicate, timeoutMs = 1000) {
       return true;
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, WAIT_POLL_INTERVAL_MS));
   }
 
   return predicate();
@@ -80,7 +86,7 @@ test('encodeGif invokes progress callback', async () => {
     // slightly after the encode promise resolves.
     const receivedProgress = await waitForCondition(
       () => events.includes('progress'),
-      1000,
+      DEFAULT_ASYNC_WAIT_TIMEOUT_MS,
     );
 
     assert.ok(events.includes('stage'));

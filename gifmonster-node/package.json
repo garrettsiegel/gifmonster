@@ -34,7 +34,8 @@
     "build:debug": "napi build",
     "test": "node --test __test__/index.test.mjs",
     "prepublishOnly": "napi prepublish -t npm",
-    "pack:dry-run": "npm pack --dry-run"
+    "pack:dry-run": "npm pack --dry-run",
+    "release:verify": "node scripts/release-readiness.mjs"
   },
   "optionalDependencies": {
     "gifmonster-darwin-arm64": "0.1.0",
