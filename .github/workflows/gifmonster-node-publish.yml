@@ -111,6 +111,9 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
+      - name: Verify release readiness
+        run: npm run release:verify
+
       - name: Download prebuild artifacts
         uses: actions/download-artifact@v4
         with:

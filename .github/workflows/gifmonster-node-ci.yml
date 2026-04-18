@@ -34,6 +34,12 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
+      - name: Verify release readiness
+        run: npm run release:verify
+
+      - name: Verify npm pack dry run
+        run: npm run pack:dry-run
+
       - name: Build addon
         run: npm run build
 
