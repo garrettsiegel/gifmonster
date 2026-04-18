@@ -23,11 +23,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/REPLACE_WITH_ORG/gifmonster.git"
+    "url": "https://github.com/garrettsiegel/gifmonster.git"
   },
-  "homepage": "https://github.com/REPLACE_WITH_ORG/gifmonster",
+  "homepage": "https://github.com/garrettsiegel/gifmonster",
   "bugs": {
-    "url": "https://github.com/REPLACE_WITH_ORG/gifmonster/issues"
+    "url": "https://github.com/garrettsiegel/gifmonster/issues"
   },
   "scripts": {
     "build": "napi build --release",
