@@ -120,15 +120,18 @@ jobs:
         with:
           pattern: gifmonster-*
           path: gifmonster-node/artifacts
-          merge-multiple: true
+          merge-multiple: false
 
       - name: Stage prebuild binaries
         shell: bash
         run: |
-          cp -v artifacts/*.node .
-
-      - name: Prepare npm packages
-        run: npx napi prepublish -t npm
+          set -euo pipefail
+          cp -v artifacts/gifmonster-darwin-arm64/*.node npm/darwin-arm64/gifmonster.darwin-arm64.node
+          cp -v artifacts/gifmonster-darwin-x64/*.node npm/darwin-x64/gifmonster.darwin-x64.node
+          cp -v artifacts/gifmonster-linux-x64-gnu/*.node npm/linux-x64-gnu/gifmonster.linux-x64-gnu.node
+          cp -v artifacts/gifmonster-linux-x64-musl/*.node npm/linux-x64-musl/gifmonster.linux-x64-musl.node
+          cp -v artifacts/gifmonster-win32-x64-msvc/*.node npm/win32-x64-msvc/gifmonster.win32-x64-msvc.node
+          ls -la npm/*/*.node
 
       - name: Publish platform packages
         shell: bash

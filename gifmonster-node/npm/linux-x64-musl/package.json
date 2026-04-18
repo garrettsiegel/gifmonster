@@ -1,6 +1,6 @@
 {
   "name": "gifmonster-linux-x64-musl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Prebuilt gifmonster binary for linux x64 musl",
   "os": ["linux"],
   "cpu": ["x64"],
